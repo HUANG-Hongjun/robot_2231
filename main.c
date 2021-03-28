@@ -28,10 +28,6 @@ void main( void )
     P1SEL = 0x00;        // GPIO
     P1DIR = 0x00;         // IN
 
-    // led
-    P1DIR |=  BIT0;
-    P1OUT &= ~BIT0;
-
     TACCR0 = 20000 - 1; // determine la periode du signal
     TACCR1 = 1500;      // determine le rapport cyclique du signal
 
@@ -40,7 +36,7 @@ void main( void )
     USICTL0 |= USISWRST;
     USICTL1 = 0;
 
-    P1DIR |= BIT2; // P2.2 en sortie
+    P1DIR |= BIT2; // P1.2 en sortie
     P1SEL |= BIT2; // selection fonction TA1.1
     TACTL = TASSEL_2 | MC_1; // source SMCLK pour TimerA (no 2), mode comptage Up
     TACCTL1 |= OUTMOD_7; // activation mode de sortie n¡ã7
@@ -82,12 +78,10 @@ __interrupt void universal_serial_interface(void)
 
     if (RXDta == 0x31) //if the input buffer is 0x31 (mainly to read the buffer)
     {
-        P1OUT |= BIT0; //turn on LED
         TACCR1 = 950;//camera turn left
     }
     else if (RXDta == 0x32)
     {
-        P1OUT &= ~BIT0; //turn off LED
         TACCR1 = 2050;//camera turn right
     }
     else if (RXDta == 0x33)
