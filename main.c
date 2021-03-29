@@ -13,14 +13,14 @@ void main( void )
 {
     // Stop watchdog timer to prevent time out reset
     WDTCTL = WDTPW | WDTHOLD;
-    if(CALBC1_1MHZ==0xFF || CALDCO_1MHZ==0xFF)
+    if((CALBC1_1MHZ==0xFF) || (CALDCO_1MHZ==0xFF))
     {
         __bis_SR_register(LPM4_bits);
     }
     else
     {
         // Factory Set.
-        BCSCTL1= CALBC1_1MHZ; //frequence d¡¯horloge 1MHz
+        BCSCTL1= CALBC1_1MHZ; //frequence dÂ¡Â¯horloge 1MHz
         DCOCTL= CALDCO_1MHZ; //
     }
 
@@ -39,7 +39,7 @@ void main( void )
     P1DIR |= BIT2; // P1.2 en sortie
     P1SEL |= BIT2; // selection fonction TA1.1
     TACTL = TASSEL_2 | MC_1; // source SMCLK pour TimerA (no 2), mode comptage Up
-    TACCTL1 |= OUTMOD_7; // activation mode de sortie n¡ã7
+    TACCTL1 |= OUTMOD_7; // activation mode de sortie nÂ¡Ã£7
 
 
     // 3 wire, mode Clk&Ph / 14.2.3 p400
@@ -59,7 +59,7 @@ void main( void )
     USICNT = 0x08;
 
     // Wait for the SPI clock to be idle (low).
-    while ((P1IN & BIT5)) ;
+    while ((P1IN & BIT5)){};
 
     USICTL0 &= ~USISWRST;
     __bis_SR_register(GIE); // general interrupts enable
@@ -73,7 +73,7 @@ void main( void )
 #pragma vector=USI_VECTOR
 __interrupt void universal_serial_interface(void)
 {
-    while( !(USICTL1 & USIIFG) );   // waiting char by USI counter flag
+    while( !(USICTL1 & USIIFG) ){};   // waiting char by USI counter flag
     RXDta = USISRL;
 
     if (RXDta == 0x31) //if the input buffer is 0x31 (mainly to read the buffer)
@@ -84,7 +84,7 @@ __interrupt void universal_serial_interface(void)
     {
         TACCR1 = 2050;//camera turn right
     }
-    else if (RXDta == 0x33)
+    else if(RXDta == 0x33)
     {
         TACCR1 = 1500;//camera reposition
     }
