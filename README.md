@@ -1,2 +1,2 @@
 # robot_2231
- 2231的程序
+Le codage du MSP430G2231
